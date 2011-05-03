@@ -40,18 +40,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <ExecutablePath>$(SolutionDir)\3rdparty\xercesc\bin;$(SolutionDir)\3rdparty\HQDL\bin;$(Codelib_bin);$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)\3rdparty\xercesc\include;$(SolutionDir)\3rdparty\HQDL\Include;$(Codelib_include);$(IncludePath)</IncludePath>
+    <ReferencePath>$(SolutionDir)\3rdparty\xercesc\lib;$(Codelib_lib);$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(SolutionDir)\3rdparty\xercesc\lib;$(SolutionDir)\3rdparty\HQDL\Lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <ExecutablePath>D:\CoreProjects\EyeCam\3rdparty\xercesc\bin;D:\CoreProjects\EyeCam\3rdparty\HQDL\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>D:\CoreProjects\EyeCam\3rdparty\xercesc\include;D:\CoreProjects\EyeCam\3rdparty\HQDL\Include;$(Codelib_include);$(IncludePath)</IncludePath>
-    <LibraryPath>D:\CoreProjects\EyeCam\3rdparty\xercesc\lib;D:\CoreProjects\EyeCam\3rdparty\HQDL\Lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
-    <ReferencePath>D:\CoreProjects\EyeCam\3rdparty\xercesc\lib;$(Codelib_lib);$(ReferencePath)</ReferencePath>
+    <ExecutablePath>$(SolutionDir)\3rdparty\xercesc\bin;$(SolutionDir)\3rdparty\HQDL\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)\3rdparty\xercesc\include;$(SolutionDir)\3rdparty\HQDL\Include;$(Codelib_include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rdparty\xercesc\lib;$(SolutionDir)\3rdparty\HQDL\Lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <ReferencePath>$(SolutionDir)\3rdparty\xercesc\lib;$(Codelib_lib);$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -91,9 +95,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>.\Release\DLCWBDEMO.exe</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\ECap.exe</OutputFile>
       <AdditionalLibraryDirectories>../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>HQDLAPI.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>HQDLAPI.lib;xerces-c_3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -136,7 +140,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>.\Debug\ECap.exe</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\ECap.exe</OutputFile>
       <AdditionalLibraryDirectories>../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>HQDLAPI.lib;xerces-c_3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
