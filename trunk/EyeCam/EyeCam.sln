@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ECap", "ECap\ECap.vcxproj", "{9D54C66B-F260-4E0C-5B85-1D6EB4F16C5F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ECap", "ECap\ECap.vcxproj", "{C77A1632-6620-BA26-C37A-9C88B86E9E62}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EPack", "EPack\EPack.vcxproj", "{2FF3BCB7-47E8-428F-A566-FBAE0F1396C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,14 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9D54C66B-F260-4E0C-5B85-1D6EB4F16C5F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9D54C66B-F260-4E0C-5B85-1D6EB4F16C5F}.Debug|Win32.Build.0 = Debug|Win32
-		{9D54C66B-F260-4E0C-5B85-1D6EB4F16C5F}.Release|Win32.ActiveCfg = Release|Win32
-		{9D54C66B-F260-4E0C-5B85-1D6EB4F16C5F}.Release|Win32.Build.0 = Release|Win32
+		{C77A1632-6620-BA26-C37A-9C88B86E9E62}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C77A1632-6620-BA26-C37A-9C88B86E9E62}.Debug|Win32.Build.0 = Debug|Win32
+		{C77A1632-6620-BA26-C37A-9C88B86E9E62}.Release|Win32.ActiveCfg = Release|Win32
+		{C77A1632-6620-BA26-C37A-9C88B86E9E62}.Release|Win32.Build.0 = Release|Win32
+		{2FF3BCB7-47E8-428F-A566-FBAE0F1396C5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2FF3BCB7-47E8-428F-A566-FBAE0F1396C5}.Debug|Win32.Build.0 = Debug|Win32
+		{2FF3BCB7-47E8-428F-A566-FBAE0F1396C5}.Release|Win32.ActiveCfg = Release|Win32
+		{2FF3BCB7-47E8-428F-A566-FBAE0F1396C5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
