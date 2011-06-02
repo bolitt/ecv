@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600" xmlns:ns1="*">
+	<fx:Script>
+		<![CDATA[
+			import com.ec.ds.*;
+			
+			import flash.ui.*;
+			import flash.utils.Timer;
+			
+			import mx.controls.Image;
+			import mx.controls.SWFLoader;
+			import mx.core.UIComponent;
+			import mx.core.UIComponentCachePolicy;
+			import mx.events.FlexEvent;
+			
+			import org.osmf.events.TimeEvent;
+			
+			private var _loadPath:String = "iphone_show2.bin";
+			// private var app:FlexView3D;
+			private var loader:com.ec.ds.Loader = new com.ec.ds.Loader();
+			// mark whether loaded
+			private var _isLoaded:Boolean = false;
+			// current image index
+			private var _currentIndex:int = -1;
+			// previous image index
+			private var _previousIndex:int = -1;
+			// is animated
+			private var _isAnimated:Boolean = false;
+			private var _animateTimer:Timer = null;
+			
+			public function get isAnimated():Boolean
+			{
+				return _isAnimated;
+			}
+
+			public function set isAnimated(value:Boolean):void
+			{
+				_isAnimated = value;
+			}
+
+			public function get previousIndex():int
+			{
+				return _previousIndex;
+			}
+
+			public function get currentIndex():int
+			{
+				return _currentIndex;
+			}
+
+			public function set currentIndex(value:int):void
+			{
+				_previousIndex = _currentIndex;
+				_currentIndex = value;
+			}
+
+			private function createScene(path:String): void
+			{
+				//app = new FlexView3D();
+				//holder.addChild(app);
+				_isLoaded = false;
+				trace(path);
+				loader.log = appendConsole;
+				loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+					appendConsole("event: loading complete");
+					var l:com.ec.ds.Loader = e.target as com.ec.ds.Loader;
+					var clip:Array = l.manifect.clip;
+					
+					for (var i:int = 0; i < clip.length; i++) {
+						var iimage:IndexedImage = clip[i] as IndexedImage;
+						var image:Image = new Image();
+						image.width = canvas.width;
+						image.height = canvas.height;
+						image.data = iimage.data;
+						image.horizontalCenter = "0";
+						image.verticalCenter = "0";
+						image.visible = false;
+						canvas.addChild(image);
+					}
+					
+					_isLoaded = true;
+					swapBuffer(0);
+					animateTurn(Direction.LEFT);
+				});
+				loader.Load(path);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				createScene(_loadPath);
+			}
+			
+			public function appendConsole(str:String):void
+			{
+				//consoleText.text += str + "\r\n";
+			}
+
+			private function swapBuffer(pos:int):void
+			{
+				var prev:int = this.previousIndex;
+				
+				canvas.getChildAt(pos).visible = true;
+				if (prev > 0) {
+					canvas.getChildAt(prev).visible = false;
+				}
+				
+				currentIndex = pos;
+			}
+			
+			protected function LeftButton_clickHandler(event:MouseEvent):void
+			{
+				turn(Direction.LEFT);
+			}
+			protected function RightButton_clickHandler(event:MouseEvent):void
+			{
+				turn(Direction.RIGHT);
+			}
+			
+			protected function turn(direction:String): void
+			{
+				if (!_isLoaded) return;
+				var l:com.ec.ds.Loader = loader;
+				var clip:Array = l.manifect.clip;
+				var newIndex:int;
+				if (direction == Direction.LEFT) {
+					newIndex = (currentIndex - 1 + clip.length) % clip.length;
+					swapBuffer(newIndex);
+				} else if (direction == Direction.RIGHT) {
+					newIndex = (currentIndex + 1) % clip.length;
+					swapBuffer(newIndex);
+				}
+			}
+			
+			protected function animateStop() : void
+			{
+				if (!_isLoaded) return;
+				
+				if (_isAnimated) {
+					_animateTimer.stop();
+					_animateTimer = null;
+				}
+				_isAnimated = false;
+			}
+			
+			protected function animateTurn(direction:String, 
+										   delay:int = 50, repeatCount:int = 0) : void
+			{
+				if (!_isLoaded) return;
+				
+				if (_isAnimated) {
+					animateStop();
+				}
+				
+				var timer:Timer = new Timer(delay, repeatCount);
+				timer.addEventListener(TimerEvent.TIMER, function (e:TimerEvent) : void {
+					turn(direction);
+				});
+				_isAnimated = true;
+				_animateTimer = timer;
+				timer.start();
+			}
+
+			private var _isMouseDown:Boolean = false;
+			private var _prevMouseDragEvent:MouseEvent = null;
+			private var _prevMouseDownEvent:MouseEvent = null;
+			private var _prevMouseUpEvent:MouseEvent = null;
+			protected function canvas_mouseDownHandler(event:MouseEvent):void
+			{
+				if (!_isLoaded) return;
+				
+				//appendConsole('mouseDown');
+				_isMouseDown = true;
+				_prevMouseDragEvent = event;
+				_prevMouseDownEvent = event;
+				_prevMouseUpEvent = null;
+				if (_isAnimated) {
+					animateStop();
+				}
+			}
+			protected function canvas_mouseUpHandler(event:MouseEvent):void
+			{
+				if (!_isLoaded) return;
+				
+				//appendConsole('mouseUp');
+				_isMouseDown = false;
+				_prevMouseDragEvent = null;
+				_prevMouseDownEvent = null;
+				_prevMouseUpEvent = event;
+			}
+			protected function canvas_mouseMoveHandler(event:MouseEvent):void
+			{
+				if (!_isLoaded) return;
+				var direction:String = null;
+				
+				if (_isMouseDown) {
+					//appendConsole('mouseDrag');
+					if (_prevMouseDragEvent != null) {
+						direction = judgeMovement(_prevMouseDragEvent, event);
+						if (direction != null) {
+							turn(direction);
+						}
+						_prevMouseDragEvent = event;
+					}
+				} else if (_prevMouseUpEvent != null) {
+					// appendConsole('animation when up');
+					direction = judgeMovement(_prevMouseUpEvent, event);
+					if (direction != null) {
+						animateTurn(direction);
+					}
+					_prevMouseUpEvent = null;
+				}
+			}
+			protected function canvas_mouseOutHandler(event:MouseEvent):void
+			{
+				if (!_isLoaded) return;
+				
+				var localPoint:Point = new Point( event.localX, event.localY );
+				// 得到全局坐标
+				var globalPoint:Point = event.target.localToGlobal( localPoint );
+				
+				if (canvas.hitTestPoint(globalPoint.x, 
+										globalPoint.y,
+										true) == false)
+				{
+					//appendConsole('mouseOut');
+					_isMouseDown = false;
+				}
+				else {
+					
+				}
+			}
+			protected function canvas_mouseOverHandler(event:MouseEvent):void
+			{
+				if (!_isLoaded) return;
+				//appendConsole('mouseOver');
+			}
+			
+			protected function judgeMovement(preEvent:MouseEvent, curEvent:MouseEvent):String
+			{
+				const MIN_STEP:int = 4;
+				var prevX:Number = preEvent.localX;
+				var currX:Number = curEvent.localX;
+				if (prevX - currX > MIN_STEP) {
+					return Direction.LEFT;
+				} else if (prevX - currX < - MIN_STEP) {
+					return Direction.RIGHT;
+				}
+				return null;
+			}
+			
+			protected function canvas_initializeHandler(event:FlexEvent):void
+			{
+				createScene(_loadPath);
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<!--
+	<mx:Grid id="holder" width="49" height="34" x="66" y="26" backgroundColor="#E6E6E6"
+			 visible="false">
+	</mx:Grid>
+	<s:Button x="31" y="299" label="Button" click="button1_clickHandler(event)"/>
+	<s:Button x="27" y="267" label="Button2"/>
+	<s:Button x="93" y="267" label="LeftButton" id="LeftButton" click="LeftButton_clickHandler(event)"/>
+	<s:Button x="91" y="299" label="RightButton" id="RightButton" click="RightButton_clickHandler(event)"/>
+	-->
+	<!-- <s:TextArea x="6" y="67" id="consoleText" styleName="consoleText" width="166" height="181" text="hi"/> -->
+	<mx:Canvas id="canvas" 
+			   width="400" height="500"
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   visible="true"
+			   mouseEnabled="true"
+			   mouseDown="canvas_mouseDownHandler(event)"
+			   mouseMove="canvas_mouseMoveHandler(event)"
+			   mouseOut="canvas_mouseOutHandler(event)"
+			   mouseOver="canvas_mouseOverHandler(event)"
+			   mouseUp="canvas_mouseUpHandler(event)"
+			   initialize="canvas_initializeHandler(event)"
+			   mouseChildren="false"
+			   cacheAsBitmap="true">
+	</mx:Canvas>
+</s:Application>

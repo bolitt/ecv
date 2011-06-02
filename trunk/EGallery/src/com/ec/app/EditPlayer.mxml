@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:local="*"
+			   minWidth="1255" minHeight="650" 
+			   applicationComplete="application_CompleteHandler(event)"
+			   xmlns:ec="com.ec.*" xmlns:ui="com.ec.ui.*">
+	<fx:Style source="EditPlayer.css"/>
+	<fx:Script>
+		<![CDATA[
+			import com.ec.command.CommandDispatcher;
+			import com.ec.log.Logger;
+			
+			import mx.events.FlexEvent;
+			
+			private var _logger:Logger = null;
+			private var _commandDispatcher:CommandDispatcher = null;
+			
+			protected function bindExternal():void
+			{
+				_commandDispatcher = new CommandDispatcher(this);
+				_commandDispatcher.bind();
+			}
+			
+			protected function application_CompleteHandler(event:FlexEvent):void 
+			{
+				Logger.writelnHandler = appendConsole;
+				_logger = Logger.getInstance(this.className);
+				_logger.debug("application_CompleteHandler");
+				_logger.debug("Sandbox:" + Security.sandboxType);
+				
+				bindExternal();
+				
+				animationComponent.loadPath = "iphone_show2.bin";				
+				animationComponent.loadScene();
+			}
+			
+			protected function appendConsole(o:Object):void
+			{
+				consoleText.appendText(o + "\r\n");
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:TextArea x="6" y="67" id="consoleText" visible="false" styleName="consoleText" width="179" height="294" text="hi" enabled="true"/>
+	<ui:AnimationComponent id="animationComponent" width="740" height="560" horizontalCenter="0" y="5">
+	</ui:AnimationComponent>
+</s:Application>

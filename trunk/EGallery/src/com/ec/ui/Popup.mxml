@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.ui-skin {
+			cornerRadius: 10;
+			backgroundAlpha: 0.8;
+			backgroundColor: #FFFFFF;
+			dropShadowVisible: true;
+		}
+		
+	</fx:Style>
+	<fx:Script>
+		<![CDATA[
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+	</fx:Declarations>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hover"/>			
+	</s:states>
+	<s:BorderContainer styleName="ui-skin" width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:Group>
+			<mx:Image source="Embed(../../../../design/resources/it2_463.jpg)" width="20" height="20" source.normal="Embed('../../../../design/resources/it2_463.jpg')">
+			</mx:Image>
+			<s:Scroller width="100%" height="100%" height.normal="272">
+				<s:RichEditableText width="100" height="199" width.normal="398">
+				</s:RichEditableText>
+			</s:Scroller>
+		</s:Group>
+	</s:BorderContainer>
+	
+</s:Group>
